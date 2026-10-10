@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Digital 360 | Portafolio</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Clases base para animaciones de scroll (Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Retrasos para elementos en cascada */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Estilos del acordeón de FAQ */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* Suficiente para el contenido */
+            padding-bottom: 1.25rem;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Gradiente animado para fondos sutiles */
+        .bg-animated {
+            background: linear-gradient(-45deg, #f0fdfa, #ffffff, #ccfbf1, #ffffff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 antialiased selection:bg-brand-500 selection:text-white">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-500 to-brand-800 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        CD
+                    </div>
+                    <span class="font-bold text-xl text-gray-900 tracking-tight">Consultorio<span class="text-brand-600">Digital</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#reto" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">El Reto</a>
+                    <a href="#servicios" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Servicios</a>
+                    <a href="#paquetes" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Planes</a>
+                    <a href="#faq" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">FAQ</a>
+                    <a href="#contacto" class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Agendar Llamada</a>
+                </div>
+                <!-- Menú móvil -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-600 hover:text-gray-900 focus:outline-none text-2xl" id="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Dropdown móvil -->
+        <div class="md:hidden hidden bg-white border-t" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#reto" class="block px-3 py-2 text-gray-600 font-medium">El Reto</a>
+                <a href="#servicios" class="block px-3 py-2 text-gray-600 font-medium">Servicios</a>
+                <a href="#paquetes" class="block px-3 py-2 text-gray-600 font-medium">Planes</a>
+                <a href="#contacto" class="block px-3 py-2 mt-4 text-center bg-gray-900 text-white rounded-md font-medium">Agendar Llamada</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-animated">
+        <!-- Decoraciones de fondo -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-100 opacity-50 blur-3xl mix-blend-multiply"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-blue-100 opacity-50 blur-3xl mix-blend-multiply"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+                
+                <div class="lg:col-span-6 text-center lg:text-left reveal-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-100 text-brand-800 text-sm font-semibold mb-6 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                        Especial para Egresados de Hipnosis
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
+                        Lanza tu Práctica <br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-600">Profesional al Mundo</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Ya tienes la certificación y las herramientas para transformar vidas. Nosotros construimos tu marca y la plataforma tecnológica automatizada para que los pacientes te encuentren y reserven.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#paquetes" class="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-center">
+                            Ver Paquetes
+                        </a>
+                        <a href="#reto" class="px-8 py-4 bg-white border-2 border-gray-200 hover:border-brand-500 hover:text-brand-600 text-gray-700 rounded-full font-semibold text-lg transition-all text-center">
+                            Conocer más
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 mt-16 lg:mt-0 reveal-right">
+                    <div class="relative rounded-2xl bg-white shadow-2xl p-2 border border-gray-100 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-500 to-blue-500 opacity-10 rounded-2xl"></div>
+                        <!-- Mockup de interfaz genérica de citas -->
+                        <div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
+                            <div class="bg-white px-4 py-3 border-b flex justify-between items-center">
+                                <div class="flex gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                                </div>
+                                <div class="text-xs font-mono text-gray-400 bg-gray-100 px-3 py-1 rounded">tudominio.com/reservas</div>
+                            </div>
+                            <div class="p-6">
+                                <div class="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-4 border-4 border-white shadow-md flex items-center justify-center">
+                                    <i class="fas fa-user-md text-3xl text-gray-400"></i>
+                                </div>
+                                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
+                                <div class="h-3 bg-gray-100 rounded w-1/3 mx-auto mb-8"></div>
+                                
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <div class="h-12 bg-brand-50 rounded border border-brand-100 flex items-center justify-center"><span class="text-xs font-semibold text-brand-600">10:00 AM</span></div>
+                                    <div class="h-12 bg-gray-100 rounded flex items-center justify-center"><span class="text-xs font-semibold text-gray-400 line-through">11:30 AM</span></div>
+                                    <div class="h-12 bg-brand-50 rounded border border-brand-100 flex items-center justify-center"><span class="text-xs font-semibold text-brand-600">02:00 PM</span></div>
+                                </div>
+                                <div class="h-10 bg-gray-900 rounded w-full mt-4 flex items-center justify-center text-white text-sm font-medium">Agendar Sesión</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating badge -->
+                        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-4 animate-bounce" style="animation-duration: 3s;">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Nueva cita</p>
+                                <p class="text-sm font-bold text-gray-900">Pago confirmado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="reto" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Comprendemos tu situación</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">El Reto del Nuevo Terapeuta</h3>
+            
+            <div class="bg-brand-50 rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-inner border border-brand-100 text-left">
+                <i class="fas fa-quote-left absolute top-6 left-6 text-6xl text-brand-100 opacity-50"></i>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed relative z-10">
+                    El mayor desafío al graduarse no es aplicar la hipnosis, <strong class="text-gray-900">es saber cómo venderla.</strong> Muchos terapeutas excelentes se estancan porque no tienen una imagen profesional o carecen de un sistema digital para recibir reservas de forma automática.
+                </p>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mt-4 relative z-10">
+                    Nuestro servicio de <strong>Consultorio Digital</strong> se encarga de toda la parte técnica y gráfica para que tú solo te enfoques en lo que mejor sabes hacer: tus sesiones.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Lo que hacemos por ti</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Los Pilares de tu Marca</h3>
+                <p class="text-lg text-gray-600">Construimos ecosistemas completos, uniendo la psicología del diseño con la ingeniería de ventas.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Pilar 1 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 reveal delay-100">
+                    <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-2xl mb-6">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-4">Identidad y Branding Estratégico</h4>
+                    <p class="text-gray-600 mb-6">Tu imagen debe transmitir autoridad y confianza clínica. No hacemos solo un logo, creamos el universo visual de tu práctica.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Estrategia de Marca:</strong> Definición de arquetipo y paciente ideal.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Diseño de Logotipo:</strong> Versiones adaptables para web y redes.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Manual de Identidad:</strong> Colores, tipografías y reglas.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Activos Sociales:</strong> Plantillas en Canva listas para publicar.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 reveal delay-200">
+                    <div class="w-16 h-16 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 text-2xl mb-6">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-4">Desarrollo Web y Embudos</h4>
+                    <p class="text-gray-600 mb-6">Transformamos visitantes curiosos en pacientes agendados mediante sistemas automatizados construidos para convertir.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Landing Pages:</strong> Diseño optimizado y persuasivo.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Configuración de Funnels:</strong> Captura de leads y ventas.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Calendarios de Reservas:</strong> Sincronizados con tu disponibilidad.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-500 mt-1"></i>
+                            <span class="text-gray-700"><strong>Automatización:</strong> Correos de bienvenida y recordatorios.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:flex items-center gap-12 reveal">
+                <div class="lg:w-1/3 mb-8 lg:mb-0 text-center lg:text-left">
+                    <div class="w-20 h-20 bg-gray-800 rounded-2xl flex items-center justify-center text-4xl mb-6 mx-auto lg:mx-0 border border-gray-700 shadow-lg text-brand-400">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Tecnología en <br/>tus manos</h3>
+                    <p class="text-gray-400">Tu negocio, tus reglas, tu base de datos.</p>
+                </div>
+                
+                <div class="lg:w-2/3 bg-gray-800 rounded-3xl p-8 md:p-10 border border-gray-700">
+                    <h4 class="text-xl font-semibold text-brand-400 mb-4">¿Cómo funciona nuestra plataforma tecnológica?</h4>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Creemos en que debes ser el dueño absoluto de tu negocio. Por eso, desarrollamos tu ecosistema web sobre <strong>GoHighLevel (GHL)</strong>, la plataforma líder en automatización para clínicas y consultores. Tu inversión funciona así:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700/50">
+                            <div class="text-white font-bold mb-2 flex items-center gap-2">
+                                <span class="bg-brand-500 text-white text-xs px-2 py-1 rounded">1</span>
+                                Nuestro Trabajo
+                            </div>
+                            <p class="text-sm text-gray-400">
+                                Un pago único a nuestra agencia por el diseño de marca, construcción web y configuración de automatizaciones (Los paquetes a continuación).
+                            </p>
+                        </div>
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700/50">
+                            <div class="text-white font-bold mb-2 flex items-center gap-2">
+                                <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded">2</span>
+                                Tu Consultorio Digital
+                            </div>
+                            <p class="text-sm text-gray-400">
+                                Para garantizar que tú eres dueño de tus pacientes, correos y web, la licencia mensual del software de GHL se paga a la plataforma a tu nombre. Nosotros somos los arquitectos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="paquetes" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Inversión Transparente</h2>
+                <h3 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Selecciona tu Ruta</h3>
+                <p class="text-lg text-gray-600">Servicios individuales y Combos Especiales diseñados para maximizar tu inversión y facilitar tu lanzamiento.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch w-full">
+                
+                <!-- Paquete 1: Servicio Individual -->
+                <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 reveal delay-100 flex flex-col h-full">
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Identidad Esencial</h4>
+                    <p class="text-sm text-gray-500 mb-6 h-10">Ideal para el egresado que solo necesita definir su base visual.</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-extrabold text-gray-900">$350</span>
+                        <span class="text-gray-500 font-medium">USD</span>
+                    </div>
+                    <div class="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full w-max mb-6">Servicio Individual</div>
+                    
+                    <ul class="space-y-4 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Estrategia y valores de marca
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Diseño de Logotipo (Múltiples versiones)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Paleta de colores y tipografías
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> 5 Plantillas para Redes (Canva)
+                        </li>
+                    </ul>
+                    <a href="#contacto" class="block w-full py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-900 font-semibold text-center rounded-xl transition-colors border border-gray-200">
+                        Elegir Plan
+                    </a>
+                </div>
+
+                <!-- Paquete 2: Servicio Individual -->
+                <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 reveal delay-200 flex flex-col h-full">
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Desarrollo Web</h4>
+                    <p class="text-sm text-gray-500 mb-6 h-10">Si ya tienes tu marca y solo necesitas la plataforma de citas en GHL.</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-extrabold text-gray-900">$550</span>
+                        <span class="text-gray-500 font-medium">USD</span>
+                    </div>
+                    <div class="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full w-max mb-6">Servicio Individual</div>
+                    
+                    <ul class="space-y-4 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-blue-500 mt-0.5"></i> Landing Page de Servicios
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-blue-500 mt-0.5"></i> Configuración básica de GHL
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-blue-500 mt-0.5"></i> Integración de Calendario
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-check text-blue-500 mt-0.5"></i> Formulario de Captación
+                        </li>
+                    </ul>
+                    <a href="#contacto" class="block w-full py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-900 font-semibold text-center rounded-xl transition-colors border border-gray-200">
+                        Elegir Plan
+                    </a>
+                </div>
+
+                <!-- Paquete 3: Combo 1 (Destacado) -->
+                <div class="bg-gray-900 rounded-3xl p-6 shadow-2xl transform lg:-translate-y-4 reveal delay-300 relative flex flex-col h-full border border-gray-800">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] text-center">
+                        <span class="bg-gradient-to-r from-brand-500 to-blue-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg block truncate">🔥 Combo Consultorio</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2 mt-3">Identidad + Web</h4>
+                    <p class="text-sm text-gray-400 mb-2 h-10">Ambos servicios individuales unidos con descuento para tu lanzamiento.</p>
+                    
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-gray-500 line-through text-lg">$900</span>
+                            <span class="text-brand-400 text-xs font-bold bg-brand-900/50 border border-brand-800 px-2 py-0.5 rounded">Ahorras $150</span>
+                        </div>
+                        <span class="text-4xl font-extrabold text-white">$750</span>
+                        <span class="text-gray-400 font-medium">USD</span>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8 flex-1 mt-2">
+                        <li class="flex items-start gap-3 text-sm text-white font-medium bg-gray-800 p-2.5 rounded-lg">
+                            <i class="fas fa-plus-circle text-brand-400 mt-0.5"></i> Incluye Identidad Esencial
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-white font-medium bg-gray-800 p-2.5 rounded-lg mb-4">
+                            <i class="fas fa-plus-circle text-brand-400 mt-0.5"></i> Incluye Desarrollo Web
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-300 px-1">
+                            <i class="fas fa-check text-brand-400 mt-0.5"></i> Configuración de dominio propio
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-300 px-1">
+                            <i class="fas fa-check text-brand-400 mt-0.5"></i> Integración de pagos (Stripe)
+                        </li>
+                    </ul>
+                    <a href="#contacto" class="block w-full py-3 px-4 bg-brand-500 hover:bg-brand-600 text-white font-semibold text-center rounded-xl transition-colors shadow-lg shadow-brand-500/30">
+                        Comenzar Ahora
+                    </a>
+                </div>
+
+                <!-- Paquete 4: Combo 2 -->
+                <div class="bg-brand-50 rounded-3xl p-6 border border-brand-200 shadow-sm hover:shadow-xl transition-all duration-300 reveal delay-400 flex flex-col h-full">
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Combo Escala</h4>
+                    <p class="text-sm text-gray-600 mb-2 h-10">Marca + Web + Embudos avanzados para captar desconocidos.</p>
+                    
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-gray-400 line-through text-lg">$1,800</span>
+                            <span class="text-brand-700 text-xs font-bold bg-brand-200/50 px-2 py-0.5 rounded">Ahorras $300</span>
+                        </div>
+                        <span class="text-4xl font-extrabold text-gray-900">$1,500</span>
+                        <span class="text-gray-500 font-medium">USD</span>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8 flex-1 mt-2">
+                        <li class="flex items-start gap-3 text-sm text-brand-900 font-semibold bg-brand-100 p-2.5 rounded-lg">
+                            <i class="fas fa-star text-brand-500 mt-0.5"></i> Todo el Combo Consultorio
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700 px-1 mt-3">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Funnel para Lead Magnet
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700 px-1">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Secuencia de 5 correos auto.
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-700 px-1">
+                            <i class="fas fa-check text-brand-500 mt-0.5"></i> Recordatorios por WhatsApp
+                        </li>
+                    </ul>
+                    <a href="#contacto" class="block w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold text-center rounded-xl transition-colors shadow-md">
+                        Elegir Plan
+                    </a>
+                </div>
+
+            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-10 max-w-2xl mx-auto reveal">
+                *Los precios indicados cubren el diseño, estrategia e implementación en tu cuenta. Las licencias de uso mensual del software (GoHighLevel) son costos operativos asumidos por tu consultorio directamente con la plataforma.
+            </p>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-gray-900 mb-4">Preguntas Frecuentes</h3>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer hover:border-brand-300 transition-colors">
+                    <div class="px-6 py-5 flex justify-between items-center bg-white z-10 relative">
+                        <h4 class="font-semibold text-gray-900">¿Por qué usamos GoHighLevel?</h4>
+                        <div class="faq-icon text-brand-500 transition-transform duration-300 text-xl">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer px-6 bg-white">
+                        <p class="text-gray-600">Porque es la herramienta más robusta del mercado para terapeutas. Reemplaza tu constructor web, email marketing, CRM y calendarios en una sola plataforma, reduciendo la complejidad técnica y ahorrándote dinero en múltiples suscripciones.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer hover:border-brand-300 transition-colors">
+                    <div class="px-6 py-5 flex justify-between items-center bg-white z-10 relative">
+                        <h4 class="font-semibold text-gray-900">¿Yo debo pagar la licencia de GoHighLevel?</h4>
+                        <div class="faq-icon text-brand-500 transition-transform duration-300 text-xl">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer px-6 bg-white">
+                        <p class="text-gray-600">Sí. Te guiaremos en el proceso de creación de tu cuenta para que tú seas el titular y dueño absoluto de tu información, pacientes y embudos. Nosotros accedemos como desarrolladores para construir tu ecosistema. Es tu consultorio, tú pagas el alquiler del local.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer hover:border-brand-300 transition-colors">
+                    <div class="px-6 py-5 flex justify-between items-center bg-white z-10 relative">
+                        <h4 class="font-semibold text-gray-900">¿Qué pasa si ya tengo un logo?</h4>
+                        <div class="faq-icon text-brand-500 transition-transform duration-300 text-xl">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer px-6 bg-white">
+                        <p class="text-gray-600">Realizamos una auditoría visual gratuita. Si tu logo actual se alinea con los estándares de calidad y transmite el mensaje correcto, podemos descontar esa parte y cotizar únicamente la estructuración y diseño de la página web.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 4 -->
+                <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer hover:border-brand-300 transition-colors">
+                    <div class="px-6 py-5 flex justify-between items-center bg-white z-10 relative">
+                        <h4 class="font-semibold text-gray-900">Soy recién graduado, ¿es para mí?</h4>
+                        <div class="faq-icon text-brand-500 transition-transform duration-300 text-xl">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer px-6 bg-white">
+                        <p class="text-gray-600">¡Totalmente! Hemos diseñado estos paquetes específicamente pensando en ti. Entendemos tu industria y sabemos que no quieres perder tiempo lidiando con tecnología. Te entregamos un sistema "llave en mano" listo para recibir citas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="py-24 relative overflow-hidden bg-brand-900">
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-brand-600 rounded-full opacity-20 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">¿Listo para llenar tu agenda?</h2>
+            <p class="text-xl text-brand-100 mb-10 max-w-2xl mx-auto">
+                Agenda una llamada de descubrimiento gratuita. Hablaremos de tus objetivos como terapeuta y cómo podemos estructurar tu marca para atraer a los pacientes correctos.
+            </p>
+            <button onclick="alert('Aquí iría el enlace a tu calendario de GoHighLevel/Calendly')" class="px-10 py-5 bg-white text-brand-900 hover:bg-gray-50 rounded-full font-bold text-lg transition-all shadow-[0_0_40px_rgba(20,184,166,0.3)] hover:shadow-[0_0_60px_rgba(20,184,166,0.5)] transform hover:-translate-y-1">
+                Agendar Llamada Exploratoria <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <footer class="bg-gray-950 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-brand-500 to-brand-800 flex items-center justify-center text-white font-bold text-sm">
+                    CD
+                </div>
+                <span class="font-bold text-lg text-white">Consultorio<span class="text-brand-500">Digital</span></span>
+            </div>
+            
+            <p class="text-gray-500 text-sm text-center md:text-left">
+                &copy; 2024 Consultorio Digital. Creado exclusivamente para profesionales del bienestar.
+            </p>
+            
+            <div class="flex gap-4">
+                <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
+                <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="far fa-envelope text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Navbar Scroll Effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-md', 'bg-white/95');
+                    navbar.classList.remove('shadow-sm', 'bg-white/90');
+                } else {
+                    navbar.classList.remove('shadow-md', 'bg-white/95');
+                    navbar.classList.add('shadow-sm', 'bg-white/90');
+                }
+            });
+
+            // 2. Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+            
+            // Cerrar menú móvil al hacer clic en un enlace
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
+            });
+
+            // 3. Scroll Reveal Animation con Intersection Observer
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+            
+            const revealCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Opcional: Descomentar la siguiente línea si quieres que la animación se ejecute solo una vez
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            };
+
+            const revealOptions = {
+                threshold: 0.15, // Porcentaje del elemento visible para disparar la animación
+                rootMargin: "0px 0px -50px 0px" // Margen inferior para que dispare un poco antes de verse completo
+            };
+
+            const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+            
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // 4. FAQ Accordion Logic
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Cerrar los otros (opcional, para comportamiento de acordeón único)
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Alternar el actual
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
